@@ -57,7 +57,8 @@ $(document).ready(function() {
     if (res.success) {
       getSound(res.id);
     } else {
-      console.log("Error occurred creating sound");
+      showWarning( 'Please fill out the captcha in order to continue.' );
+      $('.content').after(res.template)
     }
   }
 
@@ -107,5 +108,15 @@ $(document).ready(function() {
       text: text,
       killer: true
     });
+  }
+
+  function showWarning(text) {
+    noty({
+      layout: 'top',
+      theme: 'relax',
+      type: 'warning',
+      text: text,
+      killer: true
+    })
   }
 });

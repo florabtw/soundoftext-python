@@ -11,11 +11,16 @@ body {
 
 h1,h2,h3,h4,h5,h6 {
   color: #1A6868;
+  text-align: center;
 }
 
 a {
   text-decoration: none;
   color: #1A6868;
+}
+
+p {
+  text-align: justify;
 }
 
 input[type=text], select {
@@ -98,18 +103,14 @@ li.result {
   margin: .2em 0;
 }
 
-.content {
-  text-align: justify;
-}
-
-.content h1 {
-  text-align: center;
+.captcha img {
+  display: block;
+  margin: auto;
 }
 
 .results-header h1 {
-  margin: 0px;
+  margin-bottom: 0px;
   padding: 0px;
-  text-align: center;
 }
 
 .result {
@@ -185,7 +186,7 @@ li.result {
     width: 600px;
   }
 
-  form {
+  .content form {
     display: flex;
     display: -webkit-flex;
     justify-content: space-between;
@@ -195,16 +196,30 @@ li.result {
     width: 100%;
   }
 
-  .field:nth-child(1) {
+  .captcha form {
+    display: flex;
+    display: -webkit-flex;
+    justify-content: center;
+    -webkit-justify-content: center;
+    align-items: center;
+    -webkit-align-items: center;
+    width: 100%;
+  }
+
+  .content .field:nth-child(1) {
     width: 53%;
   }
 
-  .field:nth-child(2) {
+  .content .field:nth-child(2) {
     width: 25%;
   }
 
-  .field:nth-child(3) {
+  .content .field:nth-child(3) {
     width: 20%;
+  }
+
+  .captcha form > div {
+    width: 35%;
   }
 
   .field {

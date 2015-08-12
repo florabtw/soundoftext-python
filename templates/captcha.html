@@ -1,0 +1,23 @@
+<div class="wrapped captcha">
+  <h1>Captcha</h1>
+  <p>
+    Sorry about this. Sometimes Google Translate requires a captcha. Please
+    fill it out in order to continue.
+  </p>
+  <form action="/captcha" method="post">
+    <input type="hidden" name="id" value="{{captcha['idd']}}" />
+    <input type="hidden" name="lang" value="{{lang}}" />
+    <input type="hidden" name="text" value="{{text}}" />
+    <div class="field">
+      <img src="{{captcha['img']}}" alt="captcha" />
+    </div>
+    <div>
+      <div class="field">
+        <input type="text" name="text" />
+      </div>
+      <div class="field">
+        <input type="submit" />
+      </div>
+    </div>
+  </form>
+</div>

@@ -10,7 +10,7 @@ def index():
 @app.route('/sounds', methods=['POST'])
 def sounds():
     if request.method == 'POST':
-        c_sounds.create()
+        return c_sounds.create()
 
 if __name__ == '__main__':
     app.run(debug=True)
