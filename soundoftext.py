@@ -1,4 +1,5 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+from sounds import controller as c_sounds
 
 app = Flask(__name__)
 
@@ -6,5 +7,10 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
+@app.route('/sounds', methods=['POST'])
+def sounds():
+    if request.method == 'POST':
+        c_sounds.create()
+
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
