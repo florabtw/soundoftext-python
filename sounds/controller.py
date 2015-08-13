@@ -1,6 +1,7 @@
 from flask import request, jsonify, render_template
 from urllib import urlencode
 from captcha import store_captcha
+from database import insert_sound
 import requests
 import os
 import errno
@@ -32,10 +33,9 @@ def create():
                                    text=text)
         res = build_create_failure_response(template)
     elif r.status_code == 200:
-        # TODO: Implement
         sound_path = save_sound(lang, text, r.content)
-        res = { 'success': True }
-        print 'It works!'
+        idd = insert_sound(lang, text, sound_path)
+        res = { 'success': True, 'id': idd }
     else:
         # TODO: Implement
         pass
