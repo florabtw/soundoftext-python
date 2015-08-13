@@ -5,6 +5,8 @@ insert_query = 'INSERT INTO sounds (lang, text, path) values (?, ?, ?)'
 
 select_path_query = 'SELECT * FROM sounds WHERE path = ?'
 
+select_idd_query = 'SELECT * FROM sounds WHERE id = ?'
+
 # returns id of new sound
 def insert_sound(lang, text, path):
     cur = g.db.execute(insert_query, [lang, text, path])
@@ -15,5 +17,10 @@ def insert_sound(lang, text, path):
 
 def get_sound_by_path(path):
     cur = g.db.execute(select_path_query, [path])
+    res = cur.fetchone()
+    return res
+
+def get_sound_by_id(idd):
+    cur = g.db.execute(select_idd_query, [idd])
     res = cur.fetchone()
     return res

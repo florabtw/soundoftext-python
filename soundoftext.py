@@ -9,9 +9,17 @@ def index():
     return render_template('index.html')
 
 @app.route('/sounds', methods=['POST'])
-def sounds():
-    if request.method == 'POST':
+@app.route('/sounds/<idd>', methods=['GET'])
+def sounds(idd=None):
+    if request.method == 'GET':
+        return c_sounds.get_sound(idd)
+    elif request.method == 'POST':
         return c_sounds.create()
+
+@app.route('/results', methods=['GET'])
+def results():
+    if request.method == 'GET':
+        return render_template('results.html')
 
 @app.route('/captcha', methods=['POST'])
 def captcha():

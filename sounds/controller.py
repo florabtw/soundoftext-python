@@ -1,7 +1,7 @@
 from flask import request, jsonify, render_template
 from urllib import urlencode
 from captcha import store_captcha
-from database import insert_sound
+from database import insert_sound, get_sound_by_id
 import requests
 import os
 import errno
@@ -41,6 +41,14 @@ def create():
         pass
 
     return jsonify(**res)
+
+def get_sound(idd):
+    sound = get_sound_by_id(idd)
+    # TODO change from shorthand lang to full word(s)
+    lang = sound[1]
+    text = sound[2]
+    path = '/' + sound[3]
+    return render_template('sound.html', lang=lang, text=text, path=path)
 
 def receive_captcha():
     idd = request.form['id']
