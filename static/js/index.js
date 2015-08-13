@@ -129,10 +129,14 @@ $(document).ready(function() {
   function captchaSuccess(res) {
     $('.wrapped.captcha').remove()
 
-    requestSound({
-      lang: res.lang,
-      text: res.text
-    });
+    if (res.success) {
+      requestSound({
+        lang: res.lang,
+        text: res.text
+      });
+    } else {
+      loadResult(res)
+    }
   }
 
   function showError(text) {

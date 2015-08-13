@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from urllib import urlencode
 import sqlite3
 import requests
+import time
 import os
 import errno
 
@@ -75,7 +76,7 @@ def store_captcha(s, html):
 
     return {
         'idd': idd,
-        'img': captcha_filepath
+        'img': captcha_filepath + '?random=' + str(time.time())
     }
 
 def build_image_url_params(idd):
