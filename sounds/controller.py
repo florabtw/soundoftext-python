@@ -2,6 +2,7 @@ from flask import request, jsonify, render_template
 from urllib import urlencode
 from model import insert_sound, get_sound_by_id
 from model import store_captcha, save_sound
+from helpers.languages import languages
 import requests
 
 translate_base_url = 'http://translate.google.com/translate_tts'
@@ -40,8 +41,7 @@ def create():
 
 def get_sound(idd):
     sound = get_sound_by_id(idd)
-    # TODO change from shorthand lang to full word(s)
-    lang = sound[1]
+    lang = languages[ sound[1] ]
     text = sound[2]
     path = '/' + sound[3]
     return render_template('sound.html', lang=lang, text=text, path=path)
