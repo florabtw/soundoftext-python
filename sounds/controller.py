@@ -1,18 +1,14 @@
 from flask import request, jsonify, render_template
 from urllib import urlencode
-from captcha import store_captcha
-from database import insert_sound, get_sound_by_id
+from model import insert_sound, get_sound_by_id
+from model import store_captcha, save_sound
 import requests
-import os
-import errno
 
 translate_base_url = 'http://translate.google.com/translate_tts'
 
 captcha_base_url = 'http://ipv6.google.com/sorry/CaptchaRedirect'
 
 continue_url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=words&tl=en&q=what'
-
-sound_path = 'static/sounds/%(lang)s/%(text)s.mp3'
 
 s = requests.Session()
 
@@ -73,33 +69,6 @@ def receive_captcha():
         pass
 
     return jsonify(**res)
-
-def save_sound(lang, text, sound):
-    pathText = "".join( map(to_file_path, text) )
-    path = sound_path % { 'lang': lang, 'text': pathText }
-
-    create_dir_if_not_exists('static/sounds/' + lang)
-
-    f = open(path, 'w')
-    f.write(sound)
-    f.close()
-
-    return path
-
-def create_dir_if_not_exists(path):
-    try:
-        os.makedirs(path)
-    except OSError as exception:
-        if exception.errno != errno.EEXIST:
-            raise
-
-def to_file_path(c):
-    switcher = {
-        ' ': '_',
-        '/': '-',
-    }
-
-    return switcher.get(c, c)
 
 def build_create_failure_response(template):
     return {
