@@ -1,4 +1,4 @@
-from flask import Flask, g, render_template, request
+from flask import Flask, g, render_template, request, send_from_directory
 from sounds import controller as c_sounds
 import sqlite3
 
@@ -25,6 +25,10 @@ def results():
 def captcha():
     if request.method == 'POST':
         return c_sounds.receive_captcha()
+
+@app.route('/static/sounds/<path:filename>', methods=['GET'])
+def download_sound(filename):
+    return send_from_directory('static/sounds', filename, as_attachment=True)
 
 DATABASE = 'sounds.db'
 
