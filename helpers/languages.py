@@ -43,3 +43,6 @@ languages = { "af"   : "Afrikaans",
               "vi"   : "Vietnamese",
               "cy"   : "Welsh"
             }
+
+def sort_by_value():
+    return [(k, languages[k]) for k in sorted(languages, key=languages.get)]

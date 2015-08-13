@@ -1,12 +1,13 @@
 from flask import Flask, g, render_template, request, send_from_directory
 from sounds import controller as c_sounds
+from helpers import languages
 import sqlite3
 
 app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return render_template('index.html', languages=languages.sort_by_value())
 
 @app.route('/sounds', methods=['POST'])
 @app.route('/sounds/<idd>', methods=['GET'])

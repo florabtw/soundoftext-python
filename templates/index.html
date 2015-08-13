@@ -44,8 +44,9 @@
             <div class="field">
               <label for="lang">Language:</label>
               <select name="lang">
-                <option value="en">English</option>
-                {# TODO: implement all languages #}
+              {% for (key,lang) in languages %}
+                <option value="{{key}}">{{lang}}</option>
+              {% endfor %}
               </select>
             </div>
             <div class="field">
