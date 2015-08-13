@@ -1,9 +1,10 @@
 from flask import request, jsonify, render_template
-from urllib import urlencode
+from urllib import urlencode, quote
 from model import insert_sound, get_sound_by_id
 from model import store_captcha, save_sound
 from helpers.languages import languages
 import requests
+import os
 
 translate_base_url = 'http://translate.google.com/translate_tts'
 
@@ -43,7 +44,9 @@ def get_sound(idd):
     sound = get_sound_by_id(idd)
     lang = languages[ sound[1] ]
     text = sound[2]
-    path = '/' + sound[3]
+    dirname = os.path.dirname(sound[3])
+    filename = os.path.basename(sound[3])
+    path = '/' + os.path.join(dirname, quote(filename))
     return render_template('sound.html', lang=lang, text=text, path=path)
 
 def receive_captcha():
