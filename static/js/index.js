@@ -29,13 +29,43 @@ $(document).ready(function() {
   $('#submit-text').on('click', function(e) {
     e.preventDefault();
 
-    if ( $('#input-text').val().length == 0) {
+    if ( $('#input-text').val().length === 0) {
       // don't submit if input text is empty
       return false;
     }
 
     var data = $('.content form').serialize();
 
+    requestSound(data)
+
+    // clear input box
+    $('input[name=text]').val('');
+    $('input[name=text]').keyup(); // satisfy isHappy
+  });
+
+  $('body').on('click', '#submit-captcha', function(e) {
+    e.preventDefault();
+
+    if ( $('#input-captcha').val().length === 0) {
+      return false;
+    }
+
+    var data = $('.captcha form').serialize();
+
+    $.ajax({
+      type: 'POST',
+      url: '/captcha',
+      data: data,
+      success: captchaSuccess,
+      error: function() {
+        showError( 'Unable to submit captcha. '
+                 + 'Please send me an email if this continues to occur.'
+                 );
+      }
+    });
+  });
+
+  function requestSound(data) {
     $.ajax({
       type: 'POST',
       url: '/sounds',
@@ -47,11 +77,7 @@ $(document).ready(function() {
                  );
       }
     });
-
-    // clear input box
-    $('input[name=text]').val('');
-    $('input[name=text]').keyup(); // satisfy isHappy
-  });
+  }
 
   function loadResult(res) {
     if (res.success) {
@@ -97,6 +123,15 @@ $(document).ready(function() {
                  + 'Please send me an email if this continues to occur.'
                  );
       }
+    });
+  }
+
+  function captchaSuccess(res) {
+    $('.wrapped.captcha').remove()
+
+    requestSound({
+      lang: res.lang,
+      text: res.text
     });
   }
 
