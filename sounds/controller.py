@@ -52,7 +52,7 @@ def get_sound(idd):
     text = sound[2]
     dirname = os.path.dirname(sound[3])
     filename = os.path.basename(sound[3])
-    path = '/' + os.path.join(dirname, quote(filename))
+    path = '/' + os.path.join(dirname, quote(filename.encode('utf-8')))
     return render_template('sound.html', lang=lang, text=text, path=path)
 
 def receive_captcha():
@@ -95,7 +95,7 @@ def build_translate_url_params(lang, text):
     return urlencode({
         'ie': 'UTF-8',
         'tl': lang,
-        'q' : text
+        'q' : text.encode('utf-8')
     })
 
 def build_captcha_url_params(idd, captcha):

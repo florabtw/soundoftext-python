@@ -29,7 +29,7 @@ def captcha():
 
 @app.route('/static/sounds/<path:filename>', methods=['GET'])
 def download_sound(filename):
-    return send_from_directory('static/sounds', filename, as_attachment=True)
+    return send_from_directory('static/sounds', filename.encode('utf-8'), as_attachment=True)
 
 DATABASE = 'sounds.db'
 
@@ -53,4 +53,4 @@ def close_connection(exception):
         db.close()
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
