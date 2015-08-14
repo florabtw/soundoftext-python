@@ -5,6 +5,7 @@ from model import get_sound_by_lang_text_pair
 from model import store_captcha, save_sound
 from helpers.languages import languages
 import requests
+import urlparse
 import os
 
 translate_base_url = 'http://translate.google.com/translate_tts'
@@ -27,6 +28,9 @@ def create():
         translate_url = translate_base_url + '?' + params
 
         r = s.get(translate_url)
+
+        global captcha_base_url
+        captcha_base_url = urlparse.urljoin(r.url, '/sorry/CaptchaRedirect')
 
         if r.status_code == 503:
             captcha = store_captcha(s, r.text)
