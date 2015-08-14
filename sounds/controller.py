@@ -9,7 +9,7 @@ import os
 
 translate_base_url = 'http://translate.google.com/translate_tts'
 
-captcha_base_url = 'http://ipv6.google.com/sorry/CaptchaRedirect'
+captcha_base_url = 'http://google.com/sorry/CaptchaRedirect'
 
 continue_url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=words&tl=en&q=what'
 
