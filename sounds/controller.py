@@ -17,7 +17,7 @@ s = requests.Session()
 
 def create():
     lang = request.form['lang']
-    text = request.form['text']
+    text = request.form['text'].strip().lower()[:100]
 
     if sound_exists(lang, text):
         sound = get_sound_by_lang_text_pair(lang, text)
