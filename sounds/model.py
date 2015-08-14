@@ -13,6 +13,8 @@ select_path_query = 'SELECT * FROM sounds WHERE path = ?'
 
 select_idd_query = 'SELECT * FROM sounds WHERE id = ?'
 
+select_lang_text_query = 'SELECT * FROM sounds WHERE lang = ? AND text = ?'
+
 # returns id of new sound
 def insert_sound(lang, text, path):
     cur = g.db.execute(insert_query, [lang, text, path])
@@ -23,13 +25,20 @@ def insert_sound(lang, text, path):
 
 def get_sound_by_path(path):
     cur = g.db.execute(select_path_query, [path])
-    res = cur.fetchone()
-    return res
+    return cur.fetchone()
 
 def get_sound_by_id(idd):
     cur = g.db.execute(select_idd_query, [idd])
+    return cur.fetchone()
+
+def sound_exists(lang, text):
+    cur = g.db.execute(select_lang_text_query, [lang, text])
     res = cur.fetchone()
-    return res
+    return res is not None
+
+def get_sound_by_lang_text_pair(lang, text):
+    cur = g.db.execute(select_lang_text_query, [lang, text])
+    return cur.fetchone()
 
 sound_path = 'static/sounds/%(lang)s/%(text)s.mp3'
 

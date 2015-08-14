@@ -1,6 +1,7 @@
 from flask import request, jsonify, render_template, abort
 from urllib import urlencode, quote
-from model import insert_sound, get_sound_by_id
+from model import insert_sound, get_sound_by_id, sound_exists
+from model import get_sound_by_lang_text_pair
 from model import store_captcha, save_sound
 from helpers.languages import languages
 import requests
@@ -18,24 +19,26 @@ def create():
     lang = request.form['lang']
     text = request.form['text']
 
-    # TODO: Bypass Google Translate if sound already exists in DB
-
-    params = build_translate_url_params(lang, text)
-    translate_url = translate_base_url + '?' + params
-
-    r = s.get(translate_url)
-
-    if r.status_code == 503:
-        captcha = store_captcha(s, r.text)
-        template = render_template('captcha.html', captcha=captcha, lang=lang,
-                                   text=text)
-        res = build_create_failure_response(template)
-    elif r.status_code == 200:
-        sound_path = save_sound(lang, text, r.content)
-        idd = insert_sound(lang, text, sound_path)
-        res = { 'success': True, 'id': idd }
+    if sound_exists(lang, text):
+        sound = get_sound_by_lang_text_pair(lang, text)
+        res = { 'success': True, 'id': sound[0] }
     else:
-        abort(500)
+        params = build_translate_url_params(lang, text)
+        translate_url = translate_base_url + '?' + params
+
+        r = s.get(translate_url)
+
+        if r.status_code == 503:
+            captcha = store_captcha(s, r.text)
+            template = render_template('captcha.html', captcha=captcha, lang=lang,
+                                       text=text)
+            res = build_create_failure_response(template)
+        elif r.status_code == 200:
+            sound_path = save_sound(lang, text, r.content)
+            idd = insert_sound(lang, text, sound_path)
+            res = { 'success': True, 'id': idd }
+        else:
+            abort(500)
 
     return jsonify(**res)
 
