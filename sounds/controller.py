@@ -1,4 +1,4 @@
-from flask import request, jsonify, render_template
+from flask import request, jsonify, render_template, abort
 from urllib import urlencode, quote
 from model import insert_sound, get_sound_by_id
 from model import store_captcha, save_sound
@@ -35,8 +35,7 @@ def create():
         idd = insert_sound(lang, text, sound_path)
         res = { 'success': True, 'id': idd }
     else:
-        # TODO: Implement
-        pass
+        abort(500)
 
     return jsonify(**res)
 
@@ -68,8 +67,7 @@ def receive_captcha():
     elif r.status_code == 200:
         res = build_captcha_success_response(lang, text)
     else:
-        # TODO return 500 or something
-        pass
+        abort(500)
 
     return jsonify(**res)
 
