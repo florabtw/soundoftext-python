@@ -47,7 +47,9 @@ current_dir = os.path.dirname(__file__)
 sounds_dir = os.path.join(current_dir, '../static/sounds')
 sounds_dir = os.path.abspath(sounds_dir)
 
-captcha_filepath = 'static/img/captcha.jpg'
+# get absolute path to captcha img
+captcha_filepath = os.path.join(current_dir, '../static/img/captcha.jpg')
+captcha_filepath = os.path.abspath(captcha_filepath)
 
 image_base_url = 'http://google.com/sorry/image'
 
@@ -89,9 +91,12 @@ def store_captcha(s, html):
     f.write(img.content)
     f.close()
 
+    captcha_filename = os.path.basename(captcha_filepath)
+    captcha_filepath_url = os.path.join('/static/img/', captcha_filename)
+
     return {
         'idd': idd,
-        'img': captcha_filepath + '?random=' + str(time.time())
+        'img': captcha_filepath_url + '?random=' + str(time.time())
     }
 
 def build_image_url_params(idd):
