@@ -2,7 +2,7 @@ from flask import request, jsonify, render_template, abort
 from urllib import urlencode, quote
 from model import insert_sound, get_sound_by_id, sound_exists
 from model import get_sound_by_lang_text_pair
-from model import store_captcha, save_sound
+from model import store_captcha, save_sound, sounds_dir
 from helpers.languages import languages
 import requests
 import urlparse
@@ -50,9 +50,11 @@ def get_sound(idd):
     sound = get_sound_by_id(idd)
     lang = languages[ sound[1] ]
     text = sound[2]
-    dirname = os.path.dirname(sound[3])
+
     filename = os.path.basename(sound[3])
-    path = '/' + os.path.join(dirname, quote(filename.encode('utf-8')))
+    safe_filename = quote(filename.encode('utf-8'))
+    path = os.path.join('/static/sounds', sound[1], safe_filename)
+
     return render_template('sound.html', lang=lang, text=text, path=path)
 
 def receive_captcha():

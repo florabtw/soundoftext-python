@@ -42,21 +42,27 @@ def get_sound_by_lang_text_pair(lang, text):
 
 sound_path = 'static/sounds/%(lang)s/%(text)s.mp3'
 
+# get absolute path to sounds directory
+current_dir = os.path.dirname(__file__)
+sounds_dir = os.path.join(current_dir, '../static/sounds')
+sounds_dir = os.path.abspath(sounds_dir)
+
 captcha_filepath = 'static/img/captcha.jpg'
 
 image_base_url = 'http://google.com/sorry/image'
 
 def save_sound(lang, text, sound):
     pathText = "".join( map(to_file_path, text) )
-    path = sound_path % { 'lang': lang, 'text': pathText }
+    lang_dir = os.path.join(sounds_dir, lang)
+    sound_path = os.path.join(lang_dir, '%s.mp3' % pathText)
 
     create_dir_if_not_exists('static/sounds/' + lang)
 
-    f = open(path, 'w')
+    f = open(sound_path, 'w')
     f.write(sound)
     f.close()
 
-    return path
+    return sound_path
 
 def to_file_path(c):
     switcher = {

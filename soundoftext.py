@@ -1,7 +1,9 @@
 from flask import Flask, g, render_template, request, send_from_directory
 from sounds import controller as c_sounds
+from sounds.model import sounds_dir
 from helpers import languages
 import sqlite3
+import os
 
 app = Flask(__name__)
 
@@ -29,9 +31,10 @@ def captcha():
 
 @app.route('/static/sounds/<path:filename>', methods=['GET'])
 def download_sound(filename):
-    return send_from_directory('static/sounds', filename.encode('utf-8'), as_attachment=True)
+    return send_from_directory(sounds_dir, filename.encode('utf-8'), as_attachment=True)
 
-DATABASE = 'sounds.db'
+current_dir = os.path.abspath(os.path.dirname(__file__))
+DATABASE = os.path.join(current_dir, 'sounds.db')
 
 def connect_db():
     return sqlite3.connect(DATABASE)
