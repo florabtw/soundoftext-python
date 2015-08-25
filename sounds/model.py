@@ -58,7 +58,7 @@ def save_sound(lang, text, sound):
     lang_dir = os.path.join(sounds_dir, lang)
     sound_path = os.path.join(lang_dir, '%s.mp3' % pathText)
 
-    create_dir_if_not_exists('static/sounds/' + lang)
+    create_dir_if_not_exists(os.path.dirname(sound_path))
 
     f = open(sound_path, 'w')
     f.write(sound)
