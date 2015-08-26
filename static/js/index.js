@@ -39,8 +39,8 @@ $(document).ready(function() {
     requestSound(data)
 
     // clear input box
-    $('input[name=text]').val('');
-    $('input[name=text]').keyup(); // satisfy isHappy
+    $('.content input[name=text]').val('');
+    $('.content input[name=text]').keyup(); // satisfy isHappy
   });
 
   $('body').on('click', '#submit-captcha', function(e) {
