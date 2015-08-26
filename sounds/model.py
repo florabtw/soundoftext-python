@@ -51,6 +51,8 @@ sounds_dir = os.path.abspath(sounds_dir)
 captcha_filepath = os.path.join(current_dir, '../static/img/captcha.jpg')
 captcha_filepath = os.path.abspath(captcha_filepath)
 
+img_path = '/static/img/captcha.jpg'
+
 image_base_url = 'http://google.com/sorry/image'
 
 def save_sound(lang, text, sound):
@@ -94,10 +96,7 @@ def store_captcha(s, html):
     captcha_filename = os.path.basename(captcha_filepath)
     captcha_filepath_url = os.path.join('/static/img/', captcha_filename)
 
-    return {
-        'idd': idd,
-        'img': captcha_filepath_url + '?random=' + str(time.time())
-    }
+    return idd
 
 def build_image_url_params(idd):
     return urlencode({

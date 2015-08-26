@@ -2,11 +2,12 @@ from flask import request, jsonify, render_template, abort
 from urllib import urlencode, quote
 from model import insert_sound, get_sound_by_id, sound_exists
 from model import get_sound_by_lang_text_pair
-from model import store_captcha, save_sound, sounds_dir
+from model import store_captcha, save_sound, sounds_dir, img_path
 from helpers.languages import languages
 import requests
 import urlparse
 import os
+import time
 
 translate_base_url = 'http://translate.google.com/translate_tts'
 
@@ -14,15 +15,24 @@ captcha_base_url = 'http://google.com/sorry/CaptchaRedirect'
 
 continue_url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=words&tl=en&q=what'
 
+curr_captcha_id = None
+
 s = requests.Session()
 
 def create():
+    global curr_captcha_id
+
     lang = request.form['lang']
     text = request.form['text'].strip().lower()[:100]
 
     if sound_exists(lang, text):
         sound = get_sound_by_lang_text_pair(lang, text)
         res = { 'success': True, 'id': sound[0] }
+    elif curr_captcha_id:
+        img = img_path + '?nocache=' + str(time.time())
+        template = render_template('captcha.html', img=img, lang=lang,
+                                   text=text, idd=curr_captcha_id)
+        res = build_create_failure_response(template)
     else:
         params = build_translate_url_params(lang, text)
         translate_url = translate_base_url + '?' + params
@@ -33,9 +43,10 @@ def create():
         captcha_base_url = urlparse.urljoin(r.url, '/sorry/CaptchaRedirect')
 
         if r.status_code == 503:
-            captcha = store_captcha(s, r.text)
-            template = render_template('captcha.html', captcha=captcha, lang=lang,
-                                       text=text)
+            curr_captcha_id = store_captcha(s, r.text)
+            img = img_path + '?nocache=' + str(time.time())
+            template = render_template('captcha.html', img=img, lang=lang,
+                                       text=text, idd=curr_captcha_id)
             res = build_create_failure_response(template)
         elif r.status_code == 200:
             sound_path = save_sound(lang, text, r.content)
@@ -58,10 +69,16 @@ def get_sound(idd):
     return render_template('sound.html', lang=lang, text=text, path=path)
 
 def receive_captcha():
+    global curr_captcha_id
+
     idd = request.form['id']
     captcha = request.form['captcha']
     lang = request.form['lang']
     text = request.form['text']
+
+    # short circuit in case multiple users get a captcha at same time
+    if not curr_captcha_id:
+        return jsonify(**build_captcha_success_response(lang, text))
 
     params = build_captcha_url_params(idd, captcha)
     captcha_url = captcha_base_url + '?' + params
@@ -74,6 +91,8 @@ def receive_captcha():
                                    text=text)
         res = build_create_failure_response(template)
     elif r.status_code == 200:
+        curr_captcha_id = None
+
         res = build_captcha_success_response(lang, text)
     else:
         abort(500)
