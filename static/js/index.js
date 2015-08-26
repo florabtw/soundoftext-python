@@ -84,6 +84,7 @@ $(document).ready(function() {
       getSound(res.id);
     } else {
       showWarning( 'Please fill out the captcha in order to continue.' );
+      $('.wrapped.captcha').remove()
       $('.content').after(res.template)
     }
   }
