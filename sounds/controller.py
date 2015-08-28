@@ -18,6 +18,7 @@ continue_url = 'http://translate.google.com/translate_tts?ie=UTF-8&q=words&tl=en
 curr_captcha_id = None
 
 s = requests.Session()
+s.headers.update({ 'User-Agent': 'SoundOfTextBot (soundoftext.com)' })
 
 def create():
     global curr_captcha_id
