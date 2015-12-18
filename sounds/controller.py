@@ -12,8 +12,11 @@ translate_base_url = 'http://translate.google.com/translate_tts'
 s = requests.Session()
 s.headers.update({ 'User-Agent': 'SoundOfTextBot (soundoftext.com)' })
 
+current_dir = os.path.abspath(os.path.dirname(__file__))
+HASHJS_PATH = os.path.join(current_dir, 'hash.js')
+
 # javascript hash function
-hashjs_file = open('hash.js', 'r')
+hashjs_file = open(HASHJS_PATH, 'r')
 hashjs = execjs.compile( hashjs_file.read() )
 hashjs_file.close()
 
