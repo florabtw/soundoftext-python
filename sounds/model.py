@@ -1,9 +1,5 @@
 from flask import g
-from bs4 import BeautifulSoup
-from urllib import urlencode
 import sqlite3
-import requests
-import time
 import os
 import errno
 
@@ -47,14 +43,6 @@ current_dir = os.path.dirname(__file__)
 sounds_dir = os.path.join(current_dir, '../static/sounds')
 sounds_dir = os.path.abspath(sounds_dir)
 
-# get absolute path to captcha img
-captcha_filepath = os.path.join(current_dir, '../static/img/captcha.jpg')
-captcha_filepath = os.path.abspath(captcha_filepath)
-
-img_path = '/static/img/captcha.jpg'
-
-image_base_url = 'http://google.com/sorry/image'
-
 def save_sound(lang, text, sound):
     pathText = "".join( map(to_file_path, text) )
     lang_dir = os.path.join(sounds_dir, lang)
@@ -81,25 +69,3 @@ def create_dir_if_not_exists(path):
     except OSError as exception:
         if exception.errno != errno.EEXIST:
             raise
-
-def store_captcha(s, html):
-    soup = BeautifulSoup(html, 'html.parser')
-    idd = soup.input.input['value']
-
-    captcha_url = image_base_url + '?' + build_image_url_params(idd)
-    img = s.get(captcha_url)
-
-    f = open(captcha_filepath, 'w')
-    f.write(img.content)
-    f.close()
-
-    captcha_filename = os.path.basename(captcha_filepath)
-    captcha_filepath_url = os.path.join('/static/img/', captcha_filename)
-
-    return idd
-
-def build_image_url_params(idd):
-    return urlencode({
-        'id': idd,
-        'hl': 'en'
-    })

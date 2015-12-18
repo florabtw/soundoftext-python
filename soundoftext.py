@@ -24,11 +24,6 @@ def results():
     if request.method == 'GET':
         return render_template('results.html')
 
-@app.route('/captcha', methods=['POST'])
-def captcha():
-    if request.method == 'POST':
-        return c_sounds.receive_captcha()
-
 @app.route('/static/sounds/<path:filename>', methods=['GET'])
 def download_sound(filename):
     return send_from_directory(sounds_dir, filename.encode('utf-8'), as_attachment=True)
