@@ -13,7 +13,8 @@ s = requests.Session()
 s.headers.update({ 'User-Agent': 'SoundOfTextBot (soundoftext.com)' })
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
-HASHJS_PATH = os.path.join(current_dir, 'hash.js')
+parent_dir  = os.path.dirname(current_dir)
+HASHJS_PATH = os.path.join(parent_dir, 'hash.js')
 
 # javascript hash function
 hashjs_file = open(HASHJS_PATH, 'r')
