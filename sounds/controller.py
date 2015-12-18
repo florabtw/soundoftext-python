@@ -5,11 +5,17 @@ from model import get_sound_by_lang_text_pair, save_sound, sounds_dir
 from helpers.languages import languages
 import requests
 import os
+import execjs
 
 translate_base_url = 'http://translate.google.com/translate_tts'
 
 s = requests.Session()
 s.headers.update({ 'User-Agent': 'SoundOfTextBot (soundoftext.com)' })
+
+# javascript hash function
+hashjs_file = open('hash.js', 'r')
+hashjs = execjs.compile( hashjs_file.read() )
+hashjs_file.close()
 
 def create():
     lang = request.form['lang']
@@ -45,8 +51,12 @@ def get_sound(idd):
     return render_template('sound.html', lang=lang, text=text, path=path)
 
 def build_translate_url_params(lang, text):
+    hashed = hashjs.call('TL', text)
+
     return urlencode({
         'ie': 'UTF-8',
         'tl': lang,
-        'q' : text.encode('utf-8')
+        'q' : text.encode('utf-8'),
+        'client': 't',
+        'tk'    : hashed
     })
