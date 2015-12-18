@@ -4,20 +4,11 @@ var window = {
 };
 
 var t  = "a";
-var cb = "&";
-var mf = "=";
-var k  = "";
 var dd = ".";
 var Vb = "+-a^+6";
 var Tb = "+";
 var Ub = "+-3^+b+-f";
 var SL = null;
-
-var QL = function(a) {
-  return function() {
-      return a;
-  }
-}
 
 var RL = function(a, b) {
   for (var c = 0; c < b.length - 2; c += 3) {
@@ -32,18 +23,11 @@ var RL = function(a, b) {
 var TL = function(a) {
     var b;
     if (null  === SL) {
-        var c = QL(String.fromCharCode(84));
-        b = QL(String.fromCharCode(75));
-        c = [c(), c()];
-        c[1] = b();
-        SL = Number(window[c.join(b())]) || 0
+        SL = Number(window['TKK']) || 0
     }
     b = SL;
-    var d = QL(String.fromCharCode(116))
-      , c = QL(String.fromCharCode(107))
-      , d = [d(), d()];
-    d[1] = c();
-    for (var c = cb + d.join(k) + mf, d = [], e = 0, f = 0; f < a.length; f++) {
+
+    for (d = [], e = 0, f = 0; f < a.length; f++) {
         var g = a.charCodeAt(f);
         128 > g ? d[e++] = g : (2048 > g ? d[e++] = g >> 6 | 192 : (55296 == (g & 64512) && f + 1 < a.length && 56320 == (a.charCodeAt(f + 1) & 64512) ? (g = 65536 + ((g & 1023) << 10) + (a.charCodeAt(++f) & 1023),
         d[e++] = g >> 18 | 240,
