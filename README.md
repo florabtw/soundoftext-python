@@ -5,7 +5,7 @@ Sound of Text, written in Python, using Flask.
 
 ## Install Dependencies
 
-    $ pip install Flask beautifulsoup4
+    $ pip install Flask beautifulsoup4 pyexecjs
 
 ## Clone Repo
 
