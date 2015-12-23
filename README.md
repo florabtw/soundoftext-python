@@ -3,14 +3,20 @@ Sound of Text, written in Python, using Flask.
 
 # Build Instructions
 
-## Install Dependencies
-
-    $ pip install Flask beautifulsoup4 pyexecjs
-
 ## Clone Repo
 
     $ git clone https://github.com/ncpierson/soundoftext-python.git
     $ cd soundoftext-python
+
+## Install Dependencies
+
+Using Virtualenv:
+
+    $ virtualenv ./
+
+Without Virtualenv:
+
+    $ sudo pip install -r requirements.txt
 
 ## Set up database
 
