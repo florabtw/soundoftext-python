@@ -1,3 +1,7 @@
 /static/img/*
 /static/sounds/*
 *.db
+bin/
+include/
+lib/
+local/
