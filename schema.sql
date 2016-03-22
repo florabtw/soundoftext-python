@@ -4,5 +4,7 @@ CREATE TABLE sounds (
     id INTEGER PRIMARY KEY,
     lang TEXT,
     text TEXT,
-    path TEXT
+    path TEXT,
+    created INTEGER,
+    accessed INTEGER
 );

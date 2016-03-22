@@ -2,18 +2,22 @@ from flask import g
 import sqlite3
 import os
 import errno
+import time
 
-insert_query = 'INSERT INTO sounds (lang, text, path) values (?, ?, ?)'
+insert_query = 'INSERT INTO sounds (lang, text, path, created, accessed) values (?, ?, ?, ?, ?)'
 
 select_path_query = 'SELECT * FROM sounds WHERE path = ?'
 
 select_idd_query = 'SELECT * FROM sounds WHERE id = ?'
 
+update_idd_query = 'UPDATE sounds SET accessed = ? WHERE id = ?'
+
 select_lang_text_query = 'SELECT * FROM sounds WHERE lang = ? AND text = ?'
 
 # returns id of new sound
 def insert_sound(lang, text, path):
-    cur = g.db.execute(insert_query, [lang, text, path])
+    timestamp = int(time.time())
+    cur = g.db.execute(insert_query, [lang, text, path, timestamp, timestamp])
     g.db.commit()
 
     sound = get_sound_by_path(path)
@@ -24,6 +28,10 @@ def get_sound_by_path(path):
     return cur.fetchone()
 
 def get_sound_by_id(idd):
+    timestamp = int(time.time())
+    g.db.execute(update_idd_query, [timestamp, idd])
+    g.db.commit()
+
     cur = g.db.execute(select_idd_query, [idd])
     return cur.fetchone()
 
