@@ -5,21 +5,34 @@ import sqlite3, datetime, os
 today = datetime.date.today()
 ONE_MONTH_AGO = today - datetime.timedelta(days=30)
 
+def deleteRow(row):
+    delete.execute('DELETE FROM SOUNDS WHERE id=?', [row['id']])
+    try:
+        os.remove(row['path'])
+    except OSError as e:
+        print e
+
 conn = sqlite3.connect('sounds.db')
-c = conn.cursor()
-c.row_factory = sqlite3.Row
+conn.row_factory = sqlite3.Row
 
-res = c.execute('SELECT * FROM SOUNDS ORDER BY accessed ASC')
+select = conn.cursor()
+delete = conn.cursor()
 
-for row in res.fetchall():
-    access_date = datetime.datetime.utcfromtimestamp(row['accessed']).date()
-    if access_date < ONE_MONTH_AGO:
-        c.execute('DELETE FROM SOUNDS WHERE id=?', [row['id']])
-        try:
-            os.remove(row['path'])
-        except OSError as e:
-            print e
+select.execute('SELECT * FROM SOUNDS ORDER BY accessed ASC')
 
+rows = select.fetchmany(100)
+while (len(rows) != 0):
+    for row in rows:
+        if row['accessed'] == None:
+            print row
+            deleteRow(row)
+            continue
+
+        access_date = datetime.datetime.utcfromtimestamp(row['accessed']).date()
+        if access_date < ONE_MONTH_AGO:
+            deleteRow(row)
+    rows = select.fetchmany(100)
 
 conn.commit()
-c.close()
+select.close()
+delete.close()
