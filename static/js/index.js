@@ -3,8 +3,22 @@ $(document).ready(function() {
   var maxCharacters = 100;
   var $form = $('#sound-form');
   var $errorMessage = $('<span id="input-text_unhappy" class="unhappyMessage" style="display: none;" role="alert">Input is over ' + maxCharacters + ' characters! It will be truncated.</span>').appendTo($input.parent());
+  var selectedLanguage = 'en';
 
-  $('option[value=en]').prop('selected', true);
+  if (window.localStorage) {
+    // Store language preference when the select changes
+    $('select[name="lang"]').on('change', function(e) {
+      window.localStorage.setItem('sot-lang', $(this).val());
+    });
+
+    // Get current preference, if any
+    if (window.localStorage.getItem('sot-lang')) {
+      selectedLanguage = window.localStorage.getItem('sot-lang');
+    }
+  }
+
+  // Set default or preferred language
+  $('option[value=' + selectedLanguage + ']').prop('selected', true);
 
   $input
     // Set focus to main text input
