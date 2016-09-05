@@ -1,20 +1,28 @@
 $(document).ready(function() {
-  $('option[value=en]').prop('selected', true);
-  $('input[name=text]').focus();
+  var $input = $('#input-text');
+  var maxCharacters = 100;
+  var $form = $('#sound-form');
+  var $errorMessage = $('<span id="input-text_unhappy" class="unhappyMessage" style="display: none;" role="alert">Input is over ' + maxCharacters + ' characters! It will be truncated.</span>').appendTo($input.parent());
 
-  $('#sound-form').isHappy({
-    fields: {
-      '#input-text': {
-        message: 'Input is over 100 characters! It will be truncated.',
-        test: validateLength,
-        trim: false,
-        when: 'input keyup'
-      },
-    }
-  });
+  $('option[value=en]').prop('selected', true);
+
+  $input
+    // Set focus to main text input
+    .focus()
+    // Validate entries
+    .on('keyup input', function _onInputEntry (/*e*/) {
+      if (!validateLength($input.val())) {
+        // Show error message
+        $errorMessage.show();
+      }
+      else {
+        // Hide error message
+        $errorMessage.hide();
+      }
+    });
 
   function validateLength(text) {
-    return text.length <= 100;
+    return text.length <= maxCharacters;
   }
 
   $('body').on('click', 'button.play', function() {
@@ -26,21 +34,21 @@ $(document).ready(function() {
     window.open( $(this).data('sound'), '_blank' );
   });
 
-  $('#submit-text').on('click', function(e) {
+  $form.on('submit', function(e) {
     e.preventDefault();
 
-    if ( $('#input-text').val().length === 0) {
-      // don't submit if input text is empty
+    // don't submit if input text is empty or too long
+    if (!$input.val().trim().length || !validateLength($input.val())) {
       return false;
     }
 
-    var data = $('.content form').serialize();
+    var data = $form.serialize();
 
     requestSound(data)
 
     // clear input box
-    $('.content input[name=text]').val('');
-    $('.content input[name=text]').keyup(); // satisfy isHappy
+    $input.val('');
+    $input.keyup(); // satisfy validation
   });
 
   $('body').on('click', '#submit-captcha', function(e) {
