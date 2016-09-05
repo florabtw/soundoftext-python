@@ -55,7 +55,7 @@ def get_sound(idd):
     return render_template('sound.html', lang=lang, text=text, path=path)
 
 def build_translate_url_params(lang, text):
-    hashed = hashjs.call('TL', text)
+    hashed = hashjs.call('vM', text)
 
     return urlencode({
         'ie': 'UTF-8',
